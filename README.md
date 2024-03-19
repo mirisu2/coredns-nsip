@@ -26,3 +26,15 @@ $ kubectl -n ns2 exec -it nginx -- bash
 root@nginx:/# curl -v a.foo.bar
 *   Trying 192.168.1.101:80...
 ```
+Coredns rebuild
+```
+$ git clone https://github.com/coredns/coredns.git
+$ cd coredns
+# configure Corefile
+$ vim Corefile
+$ echo "nsip:github.com/mirisu2/coredns-nsip" >> plugin.cfg
+$ GOPROXY=direct go get github.com/mirisu2/coredns-nsip
+$ make
+$ docker build --network host -t dockeruser/coredns:nsip .
+$ docker push dockeruser/coredns:nsip
+```
