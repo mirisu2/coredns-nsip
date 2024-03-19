@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const pluginName = "Record"
+const pluginName = "nsip"
 
 func init() { plugin.Register(pluginName, setup) }
 
