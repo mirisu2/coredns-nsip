@@ -2,6 +2,7 @@
 Corefile
 ```
 foo.bar:1053 {
+    loop
     log
     nsip {
         ns1 192.168.1.100
@@ -32,7 +33,11 @@ $ git clone https://github.com/coredns/coredns.git
 $ cd coredns
 # configure Corefile
 $ vim Corefile
-$ echo "nsip:github.com/mirisu2/coredns-nsip" >> plugin.cfg
+
+$ cat plugin.cfg
+nsip:github.com/mirisu2/coredns-nsip
+forward:forward
+
 $ GOPROXY=direct go get github.com/mirisu2/coredns-nsip
 $ make
 $ docker build --network host -t dockeruser/coredns:nsip .
