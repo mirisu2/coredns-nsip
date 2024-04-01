@@ -62,6 +62,7 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 
 	if !ipFound {
 		log.Info("return plugin.NextOrFailure")
+		log.Info("a.Next", a.Next)
 		return plugin.NextOrFailure(a.Name(), a.Next, ctx, w, r)
 	}
 
@@ -70,7 +71,7 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 	return dns.RcodeSuccess, nil
 }
 
-func (a Record) Name() string { return "any" }
+func (a Record) Name() string { return "nsip" }
 
 func findPodNamespaceByIP(ip string) (string, error) {
 	config, err := rest.InClusterConfig()
