@@ -49,16 +49,19 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 	for _, p := range a.Rules[0].policies {
 		if p.ns == namespace {
 			ipAddr := net.ParseIP(p.ip)
+			log.Info(fmt.Sprintf("ipAddr: %s", ipAddr))
 			if ipAddr != nil {
 				rr.A = ipAddr
 				m.Answer = append(m.Answer, rr)
 				ipFound = true
+				log.Info(fmt.Sprintf("ipFound: %v", ipFound))
 				break
 			}
 		}
 	}
 
 	if !ipFound {
+		log.Info("return plugin.NextOrFailure")
 		return plugin.NextOrFailure(a.Name(), a.Next, ctx, w, r)
 	}
 
