@@ -36,7 +36,6 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 	namespace, err := findPodNamespaceByIP(querySourceIP)
 	if err != nil {
 		log.Errorf("error searching for namespace: %v", err)
-		//return plugin.NextOrFailure(a.Name(), a.Next, ctx, w, r)
 	}
 	log.Info(fmt.Sprintf("query from namespace: %s", namespace))
 
@@ -46,14 +45,20 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 	rr := new(dns.A)
 	rr.Hdr = dns.RR_Header{Name: r.Question[0].Name, Rrtype: dns.TypeA, Class: dns.ClassINET, Ttl: 3600}
 
+	ipFound := false
 	for _, p := range a.Rules[0].policies {
 		if p.ns == namespace {
-			rr.A = net.ParseIP(p.ip)
-			m.Answer = append(m.Answer, rr)
+			ipAddr := net.ParseIP(p.ip)
+			if ipAddr != nil {
+				rr.A = ipAddr
+				m.Answer = append(m.Answer, rr)
+				ipFound = true
+				break
+			}
 		}
 	}
-	log.Info(fmt.Sprintf("rr.A: %v", rr.A))
-	if rr.A == nil {
+
+	if !ipFound {
 		return plugin.NextOrFailure(a.Name(), a.Next, ctx, w, r)
 	}
 
