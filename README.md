@@ -35,6 +35,7 @@ $ cd coredns
 # configure Corefile
 $ vim Corefile
 
+(!) IT IS IMPORTANT TO NOTE THE ORDER OF PLUGINS
 $ cat plugin.cfg
 nsip:github.com/mirisu2/coredns-nsip
 forward:forward
