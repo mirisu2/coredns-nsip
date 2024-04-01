@@ -8,6 +8,7 @@ foo.bar:1053 {
         ns1 192.168.1.100
         ns2 192.168.2.101
     }
+    forward . /etc/resolv.conf
 }
 foo.baz:1053 {
     log
