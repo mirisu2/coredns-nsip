@@ -53,6 +53,10 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 		}
 	}
 
+	if len(rr.A.String()) == 0 {
+		return plugin.NextOrFailure(a.Name(), a.Next, ctx, w, r)
+	}
+
 	w.WriteMsg(m)
 
 	return dns.RcodeSuccess, nil
