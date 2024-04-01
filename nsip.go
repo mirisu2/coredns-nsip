@@ -52,8 +52,8 @@ func (a Record) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 			m.Answer = append(m.Answer, rr)
 		}
 	}
-	log.Info(fmt.Sprintf("rr.A.String(): %s", rr.A.String()))
-	if len(rr.A.String()) == 0 {
+	log.Info(fmt.Sprintf("rr.A: %v", rr.A))
+	if rr.A == nil {
 		return plugin.NextOrFailure(a.Name(), a.Next, ctx, w, r)
 	}
 
